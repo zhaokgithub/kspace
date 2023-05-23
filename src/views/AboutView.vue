@@ -8,7 +8,7 @@
   import { Button } from 'ant-design-vue';
   const ButtonGroup = Button.Group;
 
-  export default {
+  export default{
     components: {
       AButton: Button,
     },
