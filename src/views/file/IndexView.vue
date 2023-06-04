@@ -1,13 +1,13 @@
 <template>
-    <div class="login">
+    <div class="file">
       <h1>file</h1>
     </div>
   </template>
   <script>
   </script>
-  <style>
+  <style lang="less">
   @media (min-width: 1024px) {
-    .loginß {
+    .file {
       min-height: 100vh;
       display: flex;
       align-items: center;
