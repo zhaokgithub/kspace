@@ -1,15 +1,9 @@
 <template>
   <div class="file">
     <div class="left-menu">
-      <div class="item item-selected">全部文件</div>
-      <div class="item">文档</div>
-      <div class="item">图片</div>
-      <div class="item">音频</div>
-      <div class="item">视频</div>
-      <div class="item">其他</div>
-
-      <div class="item">我的分享</div>
-      <div class="item">回收站</div>
+      <div :class="selectMenu === item.key ? 'item item-selected' : 'item'" v-for="item in menus">
+      {{ item.title }}
+      </div>
     </div>
     <div class="right-file">
       <div class="action">
@@ -22,54 +16,82 @@
 </template>
 <script>
 import { Button, Input, Table } from 'ant-design-vue'
-
+import axios from 'axios'
+import { onMounted, ref } from 'vue'
 export default {
   setup() {
+    const dataSource = ref([])
+    const selectMenu = ref(1)
+
+    const queryFileList = (currentDir = '/var/storage/istorage-res') => {
+      const path = `/api/file/list/?currentDir=${currentDir}`
+      axios
+        .get(path)
+        .then((res) => {
+          console.log('res: ', res)
+          if (res && res.data.code === 1) {
+            dataSource.value = res.data.result
+          }
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    }
+    onMounted(() => {
+      queryFileList()
+    })
+    const handleMenuClick=()=>{}
     return {
-      dataSource: [
+      selectMenu,
+      handleMenuClick,
+      dataSource,
+      menus:[
         {
-          key: '1',
-          name: '胡彦斌.mp4',
-          size: 32,
-          address: '西湖区湖底公园1号',
+          title:'全部文件',
+          key: 1
         },
         {
-          key: '2',
-          name: '胡彦祖',
-          size: 42,
-          address: '西湖区湖底公园1号',
+          title:'文档',
+          key: 2
         },
         {
-          key: '2',
-          name: '胡彦祖',
-          size: 42,
-          address: '西湖区湖底公园1号',
+          title:'图片',
+          key: 3
         },
         {
-          key: '2',
-          name: '胡彦祖',
-          size: 42,
-          address: '西湖区湖底公园1号',
+          title:'音频',
+          key: 4
+        },
+        {
+          title:'视频',
+          key: 5
+        },
+        {
+          title:'回收站',
+          key: 6
+        },
+        {
+          title:'我的分享',
+          key: 7
         },
       ],
-
       columns: [
         {
           title: '文件名',
           dataIndex: 'name',
-          key: 'name',
+          key: 'name'
         },
         {
           title: '文件大小',
           dataIndex: 'size',
-          key: 'size',
+          key: 'size'
         },
         {
           title: '修改时间',
-          dataIndex: 'updateTime',
-          key: 'updateTime',
-        },
-      ],
+          dataIndex: 'createTime',
+          key: 'createTime'
+        }
+      ]
     }
   },
   components: {
@@ -84,7 +106,7 @@ export default {
   height: 100%;
   display: flex;
 }
-.left-menu{
+.left-menu {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -92,7 +114,7 @@ export default {
   width: 200px;
   padding: 10px 10px;
 
-  .item{
+  .item {
     cursor: pointer;
     height: 60px;
     font-size: 16px;
@@ -100,15 +122,15 @@ export default {
     text-align: center;
     line-height: 60px;
   }
-  .item-selected{
+  .item-selected {
     font-weight: bold;
     color: #3780f7;
     background: #e9e9e9;
   }
 }
-.right-file{
+.right-file {
   flex: 1;
-  .action{
+  .action {
     height: 50px;
     display: flex;
     align-items: center;
