@@ -10,6 +10,9 @@
         <a-button type="primary">上传文件</a-button>
         <a-button type="ghost" style="margin-left: 10px;">新建目录</a-button>
       </div>
+      <div class="nav">
+        /
+      </div>
       <a-table :dataSource="dataSource" :columns="columns">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'action'">
@@ -161,7 +164,7 @@ export default {
 }
 .right-file {
   flex: 1;
-  .action {
+  .action,.nav {
     height: 50px;
     display: flex;
     align-items: center;
