@@ -1,8 +1,8 @@
 <template>
   <div class="file">
     <div class="left-menu">
-      <div :class="selectMenu === item.key ? 'item item-selected' : 'item'" v-for="item in menus">
-      {{ item.title }}
+      <div :class="selectMenu === item.key ? 'item item-selected' : 'item'" v-for="item in menus" @click="handleMenuClick(item.key)">
+        {{ item.title }}
       </div>
     </div>
     <div class="right-file">
@@ -10,12 +10,25 @@
         <a-button type="primary">上传文件</a-button>
         <a-button type="ghost" style="margin-left: 10px;">新建目录</a-button>
       </div>
-      <a-table :dataSource="dataSource" :columns="columns" />
+      <a-table :dataSource="dataSource" :columns="columns">
+        <template #bodyCell="{ column, text, record }">
+          <template v-if="column.key === 'action'">
+            <span>
+              <a>下载</a>
+              <a-divider type="vertical" />
+              <a>查看</a>
+              <a-divider type="vertical" />
+              <a>删除</a>
+              <a-divider type="vertical" />
+            </span>
+          </template>
+        </template>
+      </a-table>
     </div>
   </div>
 </template>
 <script>
-import { Button, Input, Table } from 'ant-design-vue'
+import { Button, Input, Table, Divider } from 'ant-design-vue'
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
 export default {
@@ -40,40 +53,48 @@ export default {
     onMounted(() => {
       queryFileList()
     })
-    const handleMenuClick=()=>{}
+    const handleMenuClick = (value) => {
+      console.log('value: ', value)
+      selectMenu.value = value
+    }
+    const handleCreateDir = () => {}
+    const handleDeleteFile = (item) => {}
+    const handleDownloadFile = () => {}
     return {
       selectMenu,
       handleMenuClick,
+      handleCreateDir,
+      handleDeleteFile,
       dataSource,
-      menus:[
+      menus: [
         {
-          title:'全部文件',
+          title: '全部文件',
           key: 1
         },
         {
-          title:'文档',
+          title: '文档',
           key: 2
         },
         {
-          title:'图片',
+          title: '图片',
           key: 3
         },
         {
-          title:'音频',
+          title: '音频',
           key: 4
         },
         {
-          title:'视频',
+          title: '视频',
           key: 5
         },
         {
-          title:'回收站',
+          title: '回收站',
           key: 6
         },
         {
-          title:'我的分享',
+          title: '我的分享',
           key: 7
-        },
+        }
       ],
       columns: [
         {
@@ -90,13 +111,19 @@ export default {
           title: '修改时间',
           dataIndex: 'createTime',
           key: 'createTime'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          key: 'action',
         }
       ]
     }
   },
   components: {
     ATable: Table,
-    AButton: Button
+    AButton: Button,
+    ADivider: Divider
   }
 }
 </script>
@@ -116,11 +143,15 @@ export default {
 
   .item {
     cursor: pointer;
-    height: 60px;
+    height: 50px;
     font-size: 16px;
     width: 100%;
     text-align: center;
-    line-height: 60px;
+    line-height: 50px;
+    margin-bottom: 5px;
+    &:hover {
+      background: #e9e9e9;
+    }
   }
   .item-selected {
     font-weight: bold;
