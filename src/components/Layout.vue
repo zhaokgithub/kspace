@@ -1,15 +1,14 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-
-defineProps<{
-  msg: string
-}>()
-</script>
-
 <template>
   <div class="layout">
     <div class="header">
       <span class="title">Kpan</span>
+      <div style="cursor:pointer;">
+        <a-avatar :size="32">
+          <template #icon>
+            <UserOutlined />
+          </template>
+        </a-avatar>
+      </div>
     </div>
     <div>
       <RouterView />
@@ -17,12 +16,22 @@ defineProps<{
     <div class="footer"></div>
   </div>
 </template>
+<script>
+import { UserOutlined } from '@ant-design/icons-vue';
+import {Avatar} from 'ant-design-vue';
+import { defineComponent } from 'vue';
+export default defineComponent({
+  components: {
+    UserOutlined,
+    AAvatar:Avatar
+  },
+});
+</script>
 
 <style scoped>
-.layout{
-  
-}
-.header{
+.layout {}
+
+.header {
   height: 50px;
   background: #fff;
   display: flex;
@@ -31,6 +40,7 @@ defineProps<{
   padding: 0px 20px;
   border-bottom: 1px solid #e4e6eb;
 }
+
 h1 {
   font-weight: 500;
   font-size: 2.6rem;
@@ -46,7 +56,7 @@ h3 {
   text-align: center;
 }
 
-.title{
+.title {
   font-size: 20px;
   font-weight: bold;
 }

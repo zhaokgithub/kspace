@@ -1,27 +1,27 @@
 <template>
   <div class="file">
     <div class="left-menu">
-      <div :class="selectMenu === item.key ? 'item item-selected' : 'item'" v-for="item in menus" @click="handleMenuClick(item.key)">
+      <div :class="selectMenu === item.key ? 'item item-selected' : 'item'" v-for="item in menus" :key="item.key" @click="handleMenuClick(item.key)">
         {{ item.title }}
       </div>
     </div>
     <div class="right-file">
       <div class="action">
-        <a-button type="primary">上传文件</a-button>
-        <a-button type="ghost" style="margin-left: 10px;">新建目录</a-button>
+        <a-button type="primary">Upload</a-button>
+        <a-button type="ghost" style="margin-left: 10px;">Create Diretory</a-button>
       </div>
       <div class="nav">
-        /
+        All Files
       </div>
       <a-table :dataSource="dataSource" :columns="columns">
-        <template #bodyCell="{ column, text, record }">
+        <template #bodyCell="{ column }">
           <template v-if="column.key === 'action'">
             <span>
-              <a>下载</a>
+              <a>Download</a>
               <a-divider type="vertical" />
-              <a>查看</a>
+              <a>Detail</a>
               <a-divider type="vertical" />
-              <a>删除</a>
+              <a>Delete</a>
               <a-divider type="vertical" />
             </span>
           </template>
@@ -32,29 +32,20 @@
 </template>
 <script>
 import { Button, Input, Table, Divider } from 'ant-design-vue'
-import axios from 'axios'
+import request from '../../service/request';
 import { onMounted, ref } from 'vue'
 export default {
   setup() {
     const dataSource = ref([])
     const selectMenu = ref(1)
 
-    const queryFileList = (currentDir = '/var/storage/istorage-res') => {
-      const path = `/api/file/list/?currentDir=${currentDir}`
-      axios
-        .get(path)
-        .then((res) => {
-          console.log('res: ', res)
-          if (res && res.data.code === 1) {
-            dataSource.value = res.data.result
-          }
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+    const queryFileList =async (currentDir = '/var/storage/istorage-res') => {
+      const path = `/file/list/?currentDir=${currentDir}`
+      const res = await request.get(path);
+      dataSource.value = res.data.result
     }
     onMounted(() => {
-      queryFileList()
+      void queryFileList()
     })
     const handleMenuClick = (value) => {
       console.log('value: ', value)
@@ -71,31 +62,31 @@ export default {
       dataSource,
       menus: [
         {
-          title: '全部文件',
+          title: 'All Files',
           key: 1
         },
         {
-          title: '文档',
+          title: 'Documents',
           key: 2
         },
         {
-          title: '图片',
+          title: 'Images',
           key: 3
         },
         {
-          title: '音频',
+          title: 'Audios',
           key: 4
         },
         {
-          title: '视频',
+          title: 'Videos',
           key: 5
         },
         {
-          title: '回收站',
+          title: 'Recycle Bin',
           key: 6
         },
         {
-          title: '我的分享',
+          title: 'My Share',
           key: 7
         }
       ],
