@@ -1,7 +1,25 @@
 <template>
   <div class="layout">
     <div class="header">
-      <span class="title">Kpan</span>
+      <div class="left">
+        <span class="title" @click="handleMenuClick">Kpan</span>
+        <div style="flex:1">
+          <a-menu mode="horizontal" @click="handleMenuClick">
+            <a-menu-item key="file">
+              <template #icon>
+                <PieChartOutlined />
+              </template>
+              <span>文件仓库</span>
+            </a-menu-item>
+            <a-menu-item key="repo">
+              <template #icon>
+                <DesktopOutlined />
+              </template>
+              <span>我的知识库</span>
+            </a-menu-item>
+          </a-menu>
+        </div>
+      </div>
       <div style="cursor:pointer;">
         <a-avatar :size="32">
           <template #icon>
@@ -18,17 +36,35 @@
 </template>
 <script>
 import { UserOutlined } from '@ant-design/icons-vue';
-import {Avatar} from 'ant-design-vue';
-import { defineComponent } from 'vue';
-export default defineComponent({
+import { Avatar, Menu, MenuItem, SubMenu } from 'ant-design-vue';
+import { useRouter } from 'vue-router'
+export default {
+  data() {
+    const router = useRouter();
+    return {
+      router,
+      test:'demo'
+    }
+  },
   components: {
     UserOutlined,
-    AAvatar:Avatar
+    AAvatar: Avatar,
+    AMenu: Menu,
+    AMenuItem: MenuItem
   },
-});
+  methods: {
+    handleMenuClick(menu) {
+      const router = useRouter();
+      console.log(menu)
+      console.log(this.router)
+      this.$router.push(menu.key)
+
+    }
+  }
+}
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .layout {}
 
 .header {
@@ -39,6 +75,11 @@ export default defineComponent({
   align-items: center;
   padding: 0px 20px;
   border-bottom: 1px solid #e4e6eb;
+
+  .left {
+    display: flex;
+    align-items: center;
+  }
 }
 
 h1 {
@@ -59,5 +100,6 @@ h3 {
 .title {
   font-size: 20px;
   font-weight: bold;
+  margin-right: 50px;
 }
 </style>

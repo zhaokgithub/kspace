@@ -8,7 +8,7 @@
     <div class="right-file">
       <div class="action">
         <a-button type="primary">Upload</a-button>
-        <a-button type="ghost" style="margin-left: 10px;">Create Diretory</a-button>
+        <a-button type="ghost" style="margin-left: 10px;" @click="handleCreateDir">Create Diretory</a-button>
       </div>
       <div class="nav">
         All Files
@@ -34,10 +34,12 @@
 import { Button, Input, Table, Divider } from 'ant-design-vue'
 import request from '../../service/request';
 import { onMounted, ref } from 'vue'
+import {useRouter} from 'vue-router';
 export default {
   setup() {
     const dataSource = ref([])
     const selectMenu = ref(1)
+    const router = useRouter();
 
     const queryFileList =async (currentDir = '/var/storage/istorage-res') => {
       const path = `/file/list/?currentDir=${currentDir}`
@@ -51,7 +53,11 @@ export default {
       console.log('value: ', value)
       selectMenu.value = value
     }
-    const handleCreateDir = () => {}
+    const handleCreateDir = () => {
+      console.log('ddd')
+      console.log(useRouter())
+      console.log(router)
+    }
     const handleDeleteFile = (item) => {}
     const handleDownloadFile = () => {}
     return {
