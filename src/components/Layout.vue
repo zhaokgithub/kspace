@@ -36,7 +36,7 @@
 </template>
 <script>
 import { UserOutlined } from '@ant-design/icons-vue';
-import { Avatar, Menu, MenuItem, SubMenu } from 'ant-design-vue';
+import { Avatar, Menu, MenuItem, Dropdown } from 'ant-design-vue';
 import { useRouter } from 'vue-router'
 export default {
   data() {
@@ -50,7 +50,8 @@ export default {
     UserOutlined,
     AAvatar: Avatar,
     AMenu: Menu,
-    AMenuItem: MenuItem
+    AMenuItem: MenuItem,
+    Dropdown: Dropdown
   },
   methods: {
     handleMenuClick(menu) {
