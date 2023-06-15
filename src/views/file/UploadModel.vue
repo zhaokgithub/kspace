@@ -1,18 +1,16 @@
 <template>
-  <div class="upload">
-
-  </div>
+  <a-modal :visible="true">
+    <div>ddddd</div>
+  </a-modal>
 </template>
 <script >
-export default{
-  props:{
-    
-  },
-  setup(){
-
+import { Modal } from 'ant-design-vue'
+export default {
+  setup() {},
+  components: {
+    AModal: Modal
   }
 }
 </script>
 <style lang="less" scoped>
-
 </style>

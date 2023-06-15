@@ -2,9 +2,12 @@
   <div class="layout">
     <div class="header">
       <div class="left">
-        <span class="title" @click="handleMenuClick">Kpan</span>
+        <div style="display: flex;align-items: center;">
+          <IconLogo />
+          <span class="title" @click="handleMenuClick">云盘</span>
+        </div>
         <div style="flex:1">
-          <a-menu mode="horizontal" @click="handleMenuClick">
+          <a-menu mode="horizontal" @click="handleMenuClick" :selectedKeys="selectedKey">
             <a-menu-item key="file">
               <template #icon>
                 <PieChartOutlined />
@@ -21,53 +24,77 @@
         </div>
       </div>
       <div style="cursor:pointer;">
-        <a-avatar :size="32">
-          <template #icon>
-            <UserOutlined />
+        <a-dropdown>
+          <a-avatar :size="32">
+            <template #icon>
+              <UserOutlined />
+            </template>
+          </a-avatar>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item>
+                <a href="javascript:;" @click="handleLogout">退出登录</a>
+              </a-menu-item>
+            </a-menu>
           </template>
-        </a-avatar>
+        </a-dropdown>
       </div>
     </div>
-    <div>
+    <div class="layout-content">
       <RouterView />
     </div>
     <div class="footer"></div>
   </div>
 </template>
 <script>
-import { UserOutlined } from '@ant-design/icons-vue';
-import { Avatar, Menu, MenuItem, Dropdown } from 'ant-design-vue';
+import { UserOutlined } from '@ant-design/icons-vue'
+import { Avatar, Menu, MenuItem, Dropdown } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
+import IconLogo from './icons/IconLogo.vue';
+import Cookie from 'js-cookie';
+
 export default {
   data() {
-    const router = useRouter();
+    const router = useRouter()
     return {
       router,
-      test:'demo'
+      selectedKey: ['file']
     }
+  },
+  created() {
+    console.log('00000')
   },
   components: {
     UserOutlined,
     AAvatar: Avatar,
     AMenu: Menu,
     AMenuItem: MenuItem,
-    Dropdown: Dropdown
+    ADropdown: Dropdown,
+    IconLogo
   },
   methods: {
     handleMenuClick(menu) {
-      const router = useRouter();
-      console.log(menu)
-      console.log(this.router)
+      this.selectedKey = [menu.key]
+      const router = useRouter()
       this.$router.push(menu.key)
-
+    },
+    handleLogout(){
+      Cookie.remove('token');
+      this.$router.push('/login');
     }
   }
 }
 </script>
 
 <style scoped lang="less">
-.layout {}
-
+.layout {
+  width: 100%;
+  height: 100%;
+}
+.layout-content {
+  width: 100%;
+  height: 100%;
+}
 .header {
   height: 50px;
   background: #fff;
@@ -99,8 +126,9 @@ h3 {
 }
 
 .title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin-right: 50px;
+  margin-left: 5px;
 }
 </style>

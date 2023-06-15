@@ -10,12 +10,9 @@
 
       <div class="nav">
         <span>{{ currentDir }}</span>
-        <div class="action" v-if="selectMenu === 1">
-          <a-button type="primary">上传文件</a-button>
+        <div class="action" v-if="[1,2].includes(selectMenu)">
+          <a-button type="primary" @click="visible=true">上传文件</a-button>
           <a-button type="primary" style="margin:0px 10px;" @click="handleCreateDir">新建目录</a-button>
-          <a-button type="primary" @click="handleUpdateLocal">更新本地</a-button>
-        </div>
-        <div class="action" v-if="selectMenu === 2">
           <a-button type="primary" @click="handleUpdateLocal">更新本地</a-button>
         </div>
       </div>
@@ -28,12 +25,12 @@
               <a>Detail</a>
               <a-divider type="vertical" />
               <a>Delete</a>
-              <a-divider type="vertical" />
             </span>
           </template>
         </template>
       </a-table>
     </div>
+    <uploadModal v-if="visible" @cancel="visble=false"/>
   </div>
 </template>
 <script>
@@ -41,9 +38,11 @@ import { Button, message, Table, Divider } from 'ant-design-vue'
 import { updateLocalFile, queryFileList } from '../../service/file';
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router';
+import uploadModal from './UploadModel.vue';
 export default {
   setup() {
     const dataSource = ref([])
+    const visible = ref(false)
     const selectMenu = ref(1)
     const router = useRouter();
 
@@ -61,36 +60,35 @@ export default {
       console.log(router)
     }
     const handleDeleteFile = (item) => { }
-    const handleDownloadFile = () => { }
     const handleUpdateLocal = async () => {
-      message.error('ddd')
       const res = await updateLocalFile();
       console.log(res)
     }
     return {
-      currentDir: "istorage-res/",
-      selectMenu,
       handleMenuClick,
       handleCreateDir,
       handleDeleteFile,
       handleUpdateLocal,
+      currentDir: "istorage-res/",
+      selectMenu,
+      visible,
       dataSource,
       menus: [
         {
-          title: '我的文件',
+          title: '全部文件',
           key: 1
         },
         {
-          title: '本地文件',
+          title: '我的文件',
           key: 2
         },
         {
           title: '我的分享',
-          key: 4
+          key: 3
         },
         {
           title: '回收站',
-          key: 3
+          key: 4
         },
       ],
       columns: [
@@ -120,7 +118,8 @@ export default {
   components: {
     ATable: Table,
     AButton: Button,
-    ADivider: Divider
+    ADivider: Divider,
+    uploadModal
   }
 }
 </script>
