@@ -44,7 +44,7 @@ export default {
     async login() {
       if (this.account && this.password) {
         const data = { account: this.account, password: this.password }
-        const result = await request.post("/user/login/", { data })
+        const result = await request.post("/user/login/", data)
         if (result && result.code === 1) {
           console.log(result)
           Cookies.set('token',result.token)
