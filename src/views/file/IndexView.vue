@@ -41,12 +41,13 @@ import { useRouter } from 'vue-router';
 import uploadModal from './UploadModel.vue';
 export default {
   setup() {
+    const currentDir = "/istorage-res"
     const dataSource = ref([])
     const visible = ref(false)
     const selectMenu = ref(1)
     const router = useRouter();
 
-    const getFileList = async (currentDir = '/var') => {
+    const getFileList = async () => {
       const res = await queryFileList(currentDir);
       dataSource.value = res.result
     }
@@ -69,7 +70,7 @@ export default {
       handleCreateDir,
       handleDeleteFile,
       handleUpdateLocal,
-      currentDir: "istorage-res/",
+      currentDir,
       selectMenu,
       visible,
       dataSource,
