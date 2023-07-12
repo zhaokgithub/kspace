@@ -1,8 +1,7 @@
 <template>
   <div class="file">
     <div class="left-menu">
-      <div :class="selectMenu === item.key ? 'item item-selected' : 'item'" v-for="item in menus" :key="item.key"
-        @click="handleMenuClick(item.key)">
+      <div :class="selectMenu === item.key ? 'item item-selected' : 'item'" v-for="item in menus" :key="item.key" @click="handleMenuClick(item.key)">
         {{ item.title }}
       </div>
     </div>
@@ -17,7 +16,13 @@
         </div>
       </div>
       <a-table :dataSource="dataSource" :columns="columns">
-        <template #bodyCell="{ column }">
+        <template #bodyCell="{ column,text,record }">
+          <template v-if="column.key === 'name'">
+            <span>
+              <a @click="handleCheckDir(text)" v-if="record.type === 1">{{ text }}</a>
+              <span v-if="record.type !== 1">{{ text }}</span>
+            </span>
+          </template>
           <template v-if="column.key === 'action'">
             <span>
               <a>Download</a>
@@ -30,29 +35,29 @@
         </template>
       </a-table>
     </div>
-    <uploadModal v-if="visible" @cancel="visble=false"/>
+    <uploadModal v-if="visible" @cancel="visble=false" />
   </div>
 </template>
 <script>
 import { Button, message, Table, Divider } from 'ant-design-vue'
-import { updateLocalFile, queryFileList } from '../../service/file';
+import { updateLocalFile, queryFileList } from '../../service/file'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router';
-import uploadModal from './UploadModel.vue';
+import { useRouter } from 'vue-router'
+import uploadModal from './UploadModel.vue'
 export default {
   setup() {
-    const currentDir = "/istorage-res"
+    const currentDir = ref('/var/storage/istorage-res')
     const dataSource = ref([])
     const visible = ref(false)
     const selectMenu = ref(1)
-    const router = useRouter();
+    const router = useRouter()
 
-    const getFileList = async () => {
-      const res = await queryFileList(currentDir);
+    const getFileList = async (path) => {
+      const res = await queryFileList(path)
       dataSource.value = res.result
     }
     onMounted(() => {
-      void getFileList()
+      void getFileList(currentDir.value)
     })
     const handleMenuClick = (value) => {
       selectMenu.value = value
@@ -60,16 +65,22 @@ export default {
     const handleCreateDir = () => {
       console.log(router)
     }
-    const handleDeleteFile = (item) => { }
+    const handleDeleteFile = (item) => {}
     const handleUpdateLocal = async () => {
-      const res = await updateLocalFile();
+      const res = await updateLocalFile()
       console.log(res)
+    }
+    const handleCheckDir = async (dir) => {
+      console.log('dir: ', dir);
+      currentDir.value = currentDir.value + '/' + dir;
+      await getFileList(currentDir.value)
     }
     return {
       handleMenuClick,
       handleCreateDir,
       handleDeleteFile,
       handleUpdateLocal,
+      handleCheckDir,
       currentDir,
       selectMenu,
       visible,
@@ -90,7 +101,7 @@ export default {
         {
           title: '回收站',
           key: 4
-        },
+        }
       ],
       columns: [
         {
@@ -111,7 +122,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          key: 'action',
+          key: 'action'
         }
       ]
     }
