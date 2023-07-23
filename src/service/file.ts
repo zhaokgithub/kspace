@@ -11,3 +11,9 @@ export const updateLocalFile = async () => {
     const res = await request.post(path);
     return res
 }
+
+export const createFileDir =async (data:any) => {
+    const path = `/file/directory/`
+    const res = await request.post(path,data);
+    return res
+}

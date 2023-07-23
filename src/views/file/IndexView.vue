@@ -8,10 +8,10 @@
     <div class="right-file">
 
       <div class="nav">
-        <span>{{ currentDir }}</span>
+        <span>{{ getDisplayDir(currentDir) }}</span>
         <div class="action" v-if="[1,2].includes(selectMenu)">
           <a-button type="primary" @click="visible=true">上传文件</a-button>
-          <a-button type="primary" style="margin:0px 10px;" @click="handleCreateDir">新建目录</a-button>
+          <a-button type="primary" style="margin:0px 10px;" @click="createVisible = true">新建目录</a-button>
           <a-button type="primary" @click="handleUpdateLocal">更新本地</a-button>
         </div>
       </div>
@@ -35,26 +35,40 @@
         </template>
       </a-table>
     </div>
-    <uploadModal v-if="visible" @cancel="visble=false" />
+    <uploadModal v-if="visible" @cancel="handleCloseModal"/>
+    <createModal :currentDir="currentDir" v-if="createVisible" @cancel="handleCloseModal"  @create="handleCreateDir"/>
   </div>
 </template>
 <script>
-import { Button, message, Table, Divider } from 'ant-design-vue'
+import { Button, Table, Divider } from 'ant-design-vue'
 import { updateLocalFile, queryFileList } from '../../service/file'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import uploadModal from './UploadModel.vue'
+import uploadModal from './UploadModel.vue';
+import createModal from './CreateModal.vue'
 export default {
   setup() {
-    const currentDir = ref('/var/storage/istorage-res')
+    const currentDir = ref(['/var/storage','istorage-res'])
     const dataSource = ref([])
     const visible = ref(false)
+    const createVisible = ref(false)
     const selectMenu = ref(1)
     const router = useRouter()
+    
+    const getDisplayDir = (pathList)=>{
+      return pathList.filter(path=>path !== '/var/storage').join('/')
+    }
 
-    const getFileList = async (path) => {
-      const res = await queryFileList(path)
+    const getFileList = async (pathList) => {
+      console.log('get list',pathList.join('/'))
+      const res = await queryFileList(pathList.join('/'))
       dataSource.value = res.result
+    }
+
+    const handleCloseModal = ()=>{
+      console.log('close')
+      visible.value = false;
+      createVisible.value = false;
     }
     onMounted(() => {
       void getFileList(currentDir.value)
@@ -63,27 +77,30 @@ export default {
       selectMenu.value = value
     }
     const handleCreateDir = () => {
-      console.log(router)
+      createVisible.value = false;
+      getFileList(currentDir.value);
+      
     }
     const handleDeleteFile = (item) => {}
     const handleUpdateLocal = async () => {
       const res = await updateLocalFile()
-      console.log(res)
     }
     const handleCheckDir = async (dir) => {
-      console.log('dir: ', dir);
-      currentDir.value = currentDir.value + '/' + dir;
+      currentDir.value.push(dir);
       await getFileList(currentDir.value)
     }
     return {
+      handleCloseModal,
       handleMenuClick,
       handleCreateDir,
       handleDeleteFile,
       handleUpdateLocal,
       handleCheckDir,
+      getDisplayDir,
       currentDir,
       selectMenu,
       visible,
+      createVisible,
       dataSource,
       menus: [
         {
@@ -131,7 +148,8 @@ export default {
     ATable: Table,
     AButton: Button,
     ADivider: Divider,
-    uploadModal
+    uploadModal,
+    createModal
   }
 }
 </script>
