@@ -1,68 +1,45 @@
-# kpan
+# xSpace
 
-This template should help get you started developing with Vue 3 in Vite.
+xSpace为了方便存储个人文件的云盘，目前支持本地存储。
+- 前端：vue3+typescript+antd实现UI
+- 后端：koajs+typescript+mongodb实现文件存储
+- CI/CD：采用jenkins进行项目的构建和部署
 
-## Recommended IDE Setup
+# 功能列表
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- 文件列表显示 :white_check_mark:
+- 文件详情查看
+- 文件下载/删除 :white_check_mark:
+- 文件分享（生产分享链接）
+- 文件新建文件夹 :white_check_mark:
+- 文件上传（支持多文件）
+- 用户登录 :white_check_mark:
+- 用户增删改查
+- 用户权限，支持管理员和游客
 
-## Type Support for `.vue` Imports in TS
+# 页面展示及Demo
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+# 项目配置及部署
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+- [后端项目地址](https://gitee.com/rootingcv/Kspace-server.git)
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
+## 开发及部署
+- 安装依赖
 ```sh
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
+- 运行
 ```sh
 npm run dev
 ```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+- 编译
 
 ```sh
 npm run build
-npm run test:e2e
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+sudo docker build -t Kspace-$BUILD_NUMBER .
+sudo docker stop Kspace-frontend
+sudo docker rm Kspace-frontend
+sudo docker run -p 4001:80 -d --name Kspace-frontend Kspace-$BUILD_NUMBER

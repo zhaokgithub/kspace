@@ -10,3 +10,11 @@ export const useCounterStore = defineStore('counter', () => {
 
   return { count, doubleCount, increment }
 })
+
+export const useGlobalStore = defineStore('global',()=>{
+  state: ()=>{
+    return {
+      isMobile: false
+    }
+  }
+})

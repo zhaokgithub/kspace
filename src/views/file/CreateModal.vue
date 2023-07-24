@@ -9,7 +9,7 @@
     </a-modal>
 </template>
 <script >
-import { createFileDir } from '../../service/file'
+import { uploadCloudFile } from '../../service/file'
 import { reactive, ref } from 'vue';
 const formRef = ref();
 
@@ -25,7 +25,6 @@ export default {
     props: {
         currentDir: {
             type: Array,
-            default: ''
         }
     },
     methods: {
@@ -35,19 +34,20 @@ export default {
         async handleCreateDir() {
             const dirName = this.formState.directory;
             const data = {
-                currentDir: this.currentDir.join('/'),
-                dirName
+                currentDir: `${this.currentDir.join('/')}`,
+                fileName: dirName,
+                fileType: 1
             }
             if (!dirName) {
                 this.$message.warning("请输入目录名！")
                 return
             }
-            const res = await createFileDir(data);
+            const res = await uploadCloudFile(data)
             if (res && res.code === 1) {
                 this.$message.success('目录创建成功！');
                 this.$emit('create')
-            }else{
-                this.$message.error(res.msg);
+            } else {
+                this.$message.error(res.msg || "目录创建失败！");
             }
         }
     }

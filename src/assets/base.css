@@ -71,3 +71,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.mr-12{
+  margin-right: 12px;
+}
+.ml-12{
+  margin-left: 12px;
+}
+.mt-12{
+  margin-top: 12px;
+}
+
+.mb-12{
+  margin-bottom: 12px;
+}

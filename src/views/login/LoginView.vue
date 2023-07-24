@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-card">
-      <h1>Welcome to Kpan</h1>
+      <h1>Welcome to Kspace</h1>
       <div class="form">
         <div class="item">
           <p>Account</p>
@@ -24,7 +24,6 @@
 </template>
 <script>
 import { Button, Input, message } from 'ant-design-vue';
-import Cookies from 'js-cookie';
 import request from '../../service/request';
 const ButtonGroup = Button.Group
 export default {
@@ -47,7 +46,7 @@ export default {
         const result = await request.post("/user/login/", data)
         if (result && result.code === 1) {
           console.log(result)
-          Cookies.set('token',result.token)
+          sessionStorage.setItem('token',result.token,{httpOnly:false})
           message.success('Login successfully!');
           this.$router.push('/')
         } else {

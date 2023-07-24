@@ -1,7 +1,6 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
-const config:any = {
+const config: any = {
     baseURL: `${location.origin}/api`,
 
 }
@@ -9,7 +8,7 @@ const instance = axios.create(config);
 
 instance.interceptors.request.use(
     (config: any) => {
-        const token = Cookies.get('token');
+        const token = sessionStorage.getItem('token');
         config.headers['Authorization'] = 'Bearer ' + token;
         return config;
     },
@@ -18,14 +17,16 @@ instance.interceptors.request.use(
     })
 
 instance.interceptors.response.use((res: any) => {
-
     return res && res.data || {};
 }, (error: any) => {
+    console.log('error: ', error);
     const response = error.response;
     console.log(error)
-    if(response && response.status === 401){
+    if (response && response.status === 401) {
+        sessionStorage.removeItem('token');
         location.href = `${location.origin}/login`
     }
+    return { msg: "error" }
     return error;
 })
 
