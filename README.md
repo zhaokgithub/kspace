@@ -18,9 +18,16 @@ xSpace为了方便存储个人文件的云盘，目前支持本地存储。
 - 用户权限，支持管理员和游客
 
 # 页面展示及Demo
+![输入图片说明](doc/63F849CB-DB07-4E8B-8769-BDFAE1144A27.png)
 
+![输入图片说明](doc/36AB36CE-277D-4E37-BBCC-24138FB14938.png)
+
+![输入图片说明](doc/67E090E7-7D48-49A6-96C1-903B252FCB33.png)
+
+![输入图片说明](doc/4BB86AF3-7835-4C09-9AFE-A500C6F0EB2B.png)
 
 # 项目配置及部署
+
 
 - [后端项目地址](https://gitee.com/rootingcv/Kspace-server.git)
 
