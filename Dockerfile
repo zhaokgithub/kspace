@@ -5,7 +5,7 @@ WORKDIR /workspace
 # 赋值代码到镜像中
 COPY . .
 # 安装依赖
-RUN npm config set registry http://registry.npm.taobao.org
+RUN npm config set registry https://registry.npmmirror.com
 RUN npm install
 # 编译
 RUN npm run build
