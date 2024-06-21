@@ -13,7 +13,7 @@ RUN npm run build
 # 设置nginx服务
 FROM nginx:latest
 # 复制打包后的产物到nginx服务路径下
-COPY --from=build dist/* /workspace/www
+COPY --from=build /workspace/dist/* /workspace/www
 # 复制nginx配置文件到镜像中
 COPY src/assets/nginx.conf /etc/nginx/conf.d/Kspace.conf
 
