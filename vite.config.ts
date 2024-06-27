@@ -20,5 +20,6 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
-  }
+  },
+  envPrefix:"APP_"
 })
